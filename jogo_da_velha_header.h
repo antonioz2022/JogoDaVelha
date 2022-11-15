@@ -85,6 +85,7 @@ char printWinner(char winner)
     if (winner == PLAYER)
     {
         printf("YOU WON");
+        win++;
     }
     else if (winner == COMPUTER)
     {
@@ -178,7 +179,6 @@ void Game()
 
         if (winner != ' ' || checkFreeSpaces() == 0)
         {
-            win++;
             break;
         }
 
