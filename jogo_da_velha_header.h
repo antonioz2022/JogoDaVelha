@@ -221,6 +221,9 @@ void play()
         printf("\n");
         play();
         break;
+    default:
+        printf("Opcao nao reconhecida!");
+        break;
     }
     return;
 }
