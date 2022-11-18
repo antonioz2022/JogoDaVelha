@@ -4,53 +4,63 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <windows.h>
+#include <time.h>
+#include <locale.h>
 #define PLAYER 'X'
 #define COMPUTER 'O'
 void play();
 
-char board[3][3];
+
+// ENTRADA: formar a parte visual do jogo
+
+
+char matriz[3][3];
 int win = 0;
 
-void resetBoard()
+void resetMatriz()
 {
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            board[i][j] = ' ';
+            matriz[i][j] = ' ';
         }
     }
 };
 
-void printBoard()
+void printMatriz()
 {
-    printf(" %c | %c | %c", board[0][0], board[0][1], board[0][2]);
+    printf(" %c | %c | %c", matriz[0][0], matriz[0][1], matriz[0][2]);
     printf("\n---|---|---\n");
 
-    printf(" %c | %c | %c", board[1][0], board[1][1], board[1][2]);
+    printf(" %c | %c | %c", matriz[1][0], matriz[1][1], matriz[1][2]);
     printf("\n---|---|---\n");
 
-    printf(" %c | %c | %c", board[2][0], board[2][1], board[2][2]);
-    printf("\n---|---|---\n");
+    printf(" %c | %c | %c", matriz[2][0], matriz[2][1], matriz[2][2]);
+	printf("\n---|---|---\n");
 
     printf("\n");
 };
 
-int checkFreeSpaces()
+int checkEspacoLivre()
 {
-    int freeSpaces = 9;
+    int espacoLivre = 9;
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            if (board[i][j] != ' ')
+            if (matriz[i][j] != ' ')
             {
-                freeSpaces--;
+                espacoLivre--;
             }
         }
     }
-    return freeSpaces;
+    return espacoLivre;
 };
+
+
+//PROCESSAMENTO: reproduzir o jogo, recebendo as informações sobre posição escolhida do jogador
+
 
 void playerMove()
 {
@@ -59,60 +69,60 @@ void playerMove()
 
     do
     {
-        printf("Enter row #(1-3): ");
+        printf("Digite a linha desejada de 1 a 3:");
         scanf("%d", &x);
         x--;
 
-        printf("Enter column #(1-3): ");
+        printf("Digite a coluna desejada de 1 a 3:");
         scanf("%d", &y);
         y--;
 
-        if (board[x][y] != ' ')
+        if (matriz[x][y] != ' ')
         {
-            printf("Invalid move!");
+            printf("Movimento inválido!\n");
         }
         else
         {
-            board[x][y] = PLAYER;
+            matriz[x][y] = PLAYER;
             break;
         }
 
-    } while (board[x][y] != ' ');
+    } while (matriz[x][y] != ' ');
 };
 
 char printWinner(char winner)
 {
     if (winner == PLAYER)
     {
-        printf("YOU WON");
+        printf("Você ganhou!");
         win++;
     }
     else if (winner == COMPUTER)
     {
-        printf("YOU LOSED");
+        printf("Você perdeu");
     }
     else
     {
-        printf("IT'S A TIE");
+        printf("È um empate.");
     }
 };
 
 void computerMove()
 {
-    // creates a seed based on current time
+
     srand(time(0));
     int x;
     int y;
 
-    if (checkFreeSpaces() > 0)
+    if (checkEspacoLivre() > 0)
     {
         do
         {
             x = rand() % 3;
             y = rand() % 3;
-        } while (board[x][y] != ' ');
+        } while (matriz[x][y] != ' ');
 
-        board[x][y] = COMPUTER;
+        matriz[x][y] = COMPUTER;
     }
     else
     {
@@ -120,47 +130,68 @@ void computerMove()
     }
 }
 
+
+// SAÌDA: verificar quem ganhou e exibir o resultado do jogo, dando a opção de escolher as preferências do menu novamente.
+
+
 void printMenu()
 {
-    printf("  JOGO DA VELHA ");
+    printf("  JOGO DA VELHA  ");
     printf("\n");
-    printf(" JOGAR - Digite 1 ");
+    printf(" JOGAR    - Digite 1 ");
     printf("\n");
-    printf(" Sair -  Digite 2 ");
+    printf(" Sair     - Digite 2 ");
     printf("\n");
-    printf(" Rank -  Digite 3 ");
+    printf(" Rank     - Digite 3 ");
+    printf("\n");
+    printf(" Creditos - Digite 4");
     printf("\n");
     return;
 }
 
+void printCredits(){
+    printf("\n");
+    printf("***** CRÈDITOS *****");
+    printf("\n");
+    printf("\n");
+    printf("- Antonio Albuquerque de Oliveira Neto");
+    printf("\n");
+    printf("- Gabriel José Ribeiro Bezerra");
+    printf("\n");
+    printf("- Joyce da Silva Nascimento");
+    printf("\n");
+    printf("- Lucas Emanuel Albuquerque");
+    printf("\n");
+}
+
 char checkWinner()
 {
-    // check rows
+    // verifica as linhas
     for (int i = 0; i < 3; i++)
     {
-        if (board[i][0] == board[i][1] && board[i][0] == board[i][2])
+        if (matriz[i][0] == matriz[i][1] && matriz[i][0] == matriz[i][2])
         {
-            return board[i][0];
+            return matriz[i][0];
         };
     }
 
-    // checkColumns
+    // verifica as colunas
     for (int i = 0; i < 3; i++)
     {
-        if (board[0][i] == board[1][i] && board[0][i] == board[2][i])
+        if (matriz[0][i] == matriz[1][i] && matriz[0][i] == matriz[2][i])
         {
-            return board[0][i];
+            return matriz[0][i];
         };
     }
 
-    // check diagonals
-    if (board[0][0] == board[1][1] && board[0][0] == board[2][2])
+    // verifica as diagonais
+    if (matriz[0][0] == matriz[1][1] && matriz[0][0] == matriz[2][2])
     {
-        return board[0][0];
+        return matriz[0][0];
     };
-    if (board[0][2] == board[1][1] && board[0][2] == board[2][0])
+    if (matriz[0][2] == matriz[1][1] && matriz[0][2] == matriz[2][0])
     {
-        return board[0][2];
+        return matriz[0][2];
     };
 
     return ' ';
@@ -169,15 +200,15 @@ char checkWinner()
 void Game()
 {
     char winner = ' ';
-    resetBoard();
+    resetMatriz();
 
-    while (winner == ' ' && checkFreeSpaces() != 0)
+    while (winner == ' ' && checkEspacoLivre() != 0)
     {
-        printBoard();
+        printMatriz();
         playerMove();
         winner = checkWinner();
 
-        if (winner != ' ' || checkFreeSpaces() == 0)
+        if (winner != ' ' || checkEspacoLivre() == 0)
         {
             break;
         }
@@ -185,13 +216,13 @@ void Game()
         computerMove();
         winner = checkWinner();
 
-        if (winner != ' ' || checkFreeSpaces() == 0)
+        if (winner != ' ' || checkEspacoLivre() == 0)
         {
             break;
         }
     }
 
-    printBoard();
+    printMatriz();
     printWinner(winner);
 
     printf("\n");
@@ -216,13 +247,17 @@ void play()
         break;
     case 3:
         printf("\n");
-        printf("Vitorias: %d", win);
+        printf("Vitórias: %d", win);
         printf("\n");
         printf("\n");
         play();
         break;
+    case 4:
+        printCredits();
+        printf("\n");
+        play(); 
     default:
-        printf("Opcao nao reconhecida!");
+        printf("Opção não reconhecida!");
         break;
     }
     return;

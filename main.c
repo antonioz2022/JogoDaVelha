@@ -4,6 +4,7 @@ void play();
 
 int main()
 {
+   setlocale(0, "Portuguese");
    play();
    return 0;
 }
